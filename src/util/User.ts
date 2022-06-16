@@ -1,4 +1,4 @@
-abstract class AbstractUser {
+export abstract class AbstractUser {
   constructor(private name: string, private age: number) {}
 
   getName(): string {
