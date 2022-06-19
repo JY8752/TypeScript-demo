@@ -18,7 +18,7 @@ describe('UserRepository', () => {
   });
 
   afterEach(async () => {
-    repository.deleteAllByIds(testIds);
+    await repository.deleteAllByIds(testIds);
   });
 
   it('save and find', async () => {

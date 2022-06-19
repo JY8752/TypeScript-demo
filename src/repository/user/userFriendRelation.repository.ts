@@ -36,4 +36,14 @@ export class UserFriendRelationRepository {
       },
     });
   }
+
+  async deleteByIds(ids: string[]): Promise<Prisma.BatchPayload> {
+    return this.prismaService.userFriendRelation.deleteMany({
+      where: {
+        id: {
+          in: ids,
+        },
+      },
+    });
+  }
 }

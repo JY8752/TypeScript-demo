@@ -38,8 +38,8 @@ export class UserRepository {
     return this.prismaService.user.delete({ where });
   }
 
-  async deleteAllByIds(ids: string[]) {
-    this.prismaService.user.deleteMany({
+  async deleteAllByIds(ids: string[]): Promise<Prisma.BatchPayload> {
+    return this.prismaService.user.deleteMany({
       where: {
         id: {
           in: ids,
