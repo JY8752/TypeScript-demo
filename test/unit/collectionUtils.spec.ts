@@ -1,4 +1,4 @@
-import { generixMap, map } from './collectionUtils';
+import { generixMap, map } from '../../src/util/collectionUtils';
 
 describe('collectionUtilsTest', () => {
   describe('map', () => {

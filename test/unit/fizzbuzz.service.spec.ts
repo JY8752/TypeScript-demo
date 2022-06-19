@@ -1,5 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { FizzBuzzService } from './fizzbuzz.service';
+import { FizzBuzzService } from '../../src/service/fizzbuzz/fizzbuzz.service';
 
 describe('FizzBuzzService', () => {
   let service: FizzBuzzService;

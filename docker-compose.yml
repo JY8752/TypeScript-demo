@@ -1,0 +1,35 @@
+#mongoレプリカセット
+#レプリカセットで認証を通す場合keyfileが必要
+#なので認証通してないが、認証をちゃんと通す場合keyfileを生成してconfファイルもちゃんと用意しないとダメかも
+version: "3.1"
+services:
+  mongo:
+    image: mongo
+    command: --replSet rs0
+    container_name: mongo
+    restart: always
+    ports:
+      - "27017:27017"
+      - "28017:28017"
+    volumes:
+      - ./data/mongo:/data/db
+    networks:
+      - app-net
+  mongo-express:
+    image: mongo-express
+    restart: always
+    ports:
+      - "8081:8081"
+    depends_on:
+      - mongo
+    environment:
+      ME_CONFIG_MONGODB_URL: mongodb://@mongo:27017/
+      ME_CONFIG_MONGODB_SERVER: mongo
+    networks:
+      - app-net
+networks:
+  app-net:
+    driver: bridge
+
+# 起動後下記コマンドでレプリカセットの初期化
+# docker-compose exec mongo mongo --eval "rs.initiate({_id: 'rs0', members: [{_id: 0, host: 'localhost:27017'}]});"

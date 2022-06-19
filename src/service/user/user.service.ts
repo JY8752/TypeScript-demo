@@ -1,38 +1,48 @@
 import { Injectable } from '@nestjs/common';
-import { Prisma, User } from '@prisma/client';
-import { PrismaService } from '../prisma/prisma.service';
+import { User } from '@prisma/client';
+import {
+  CreateUserInput,
+  MakeFriendInput,
+  UnFriendInput,
+} from 'src/dto/user/user.dto';
+import { UserRepository } from 'src/repository/user/user.repository';
+import { UserFriendRelationRepository } from 'src/repository/user/userFriendRelation.repository';
 
 @Injectable()
 export class UserService {
-  constructor(private prismaService: PrismaService) {}
+  constructor(
+    private readonly userRepository: UserRepository,
+    private readonly userFriendRelationRepository: UserFriendRelationRepository,
+  ) {}
 
-  async save(data: Prisma.UserCreateInput): Promise<User> {
-    return this.prismaService.user.create({ data });
+  async create(input: CreateUserInput): Promise<User> {
+    return this.userRepository.save(input);
   }
 
-  async findById(
-    userWhereUniqueInput: Prisma.UserWhereUniqueInput,
-  ): Promise<User | null> {
-    return this.prismaService.user.findUnique({ where: userWhereUniqueInput });
+  async makeFriends({ userId, friendId }: MakeFriendInput): Promise<void> {
+    if (await this.userFriendRelationRepository.exist(userId, friendId))
+      throw Error(`既に友達同士です userId: ${userId} friendId: ${friendId}`);
+    const serverTime = new Date();
+
+    this.userFriendRelationRepository.save({
+      userId,
+      friendId,
+      createdAt: serverTime,
+    });
+    this.userFriendRelationRepository.save({
+      userId: friendId,
+      friendId: userId,
+      createdAt: serverTime,
+    });
   }
 
-  async findMany(params: {
-    where: Prisma.UserWhereInput;
-    orderBy: Prisma.UserOrderByWithRelationInput;
-  }): Promise<User[]> {
-    const { where, orderBy } = params;
-    return this.prismaService.user.findMany({ where, orderBy });
-  }
+  async unfriending({ userId, friendId }: UnFriendInput): Promise<void> {
+    if (!(await this.userFriendRelationRepository.exist(userId, friendId)))
+      throw Error(
+        `まずは友だちになることから始めましょう userId: ${userId} friendId: ${friendId}`,
+      );
 
-  async update(params: {
-    where: Prisma.UserWhereUniqueInput;
-    data: Prisma.UserUpdateInput;
-  }): Promise<User> {
-    const { where, data } = params;
-    return this.prismaService.user.update({ data, where });
-  }
-
-  async delete(where: Prisma.UserWhereUniqueInput): Promise<User> {
-    return this.prismaService.user.delete({ where });
+    this.userFriendRelationRepository.delete(userId, friendId);
+    this.userFriendRelationRepository.delete(friendId, userId);
   }
 }
