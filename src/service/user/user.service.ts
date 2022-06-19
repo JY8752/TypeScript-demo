@@ -4,9 +4,9 @@ import {
   CreateUserInput,
   MakeFriendInput,
   UnFriendInput,
-} from 'src/dto/user/user.dto';
-import { UserRepository } from 'src/repository/user/user.repository';
-import { UserFriendRelationRepository } from 'src/repository/user/userFriendRelation.repository';
+} from '../../dto/user/user.dto';
+import { UserRepository } from '../../repository/user/user.repository';
+import { UserFriendRelationRepository } from '../../repository/user/userFriendRelation.repository';
 
 @Injectable()
 export class UserService {

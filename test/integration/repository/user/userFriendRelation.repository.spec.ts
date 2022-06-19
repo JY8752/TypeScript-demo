@@ -1,6 +1,10 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { Prisma, UserFriendRelation } from '@prisma/client';
 import { ObjectId } from 'bson';
+import {
+  assertUserFriendRelation,
+  isUserFriendRelation,
+} from '../../../helper/user/user.helper';
 import { PrismaService } from '../../../../src/repository/prisma/prisma.service';
 import { UserFriendRelationRepository } from '../../../../src/repository/user/userFriendRelation.repository';
 
@@ -71,31 +75,5 @@ describe('UserFriendRelationRepository', () => {
     });
     testIds.push(saved.id);
     return saved;
-  };
-
-  const assertUserFriendRelation = (
-    actual: UserFriendRelation,
-    { userId, friendId, createdAt }: Omit<UserFriendRelation, 'id'>,
-  ) => {
-    expect(actual.id).not.toBeNull;
-    expect(actual.userId).toBe(userId);
-    expect(actual.friendId).toBe(friendId);
-    expect(actual.createdAt).toStrictEqual(createdAt);
-  };
-
-  const isUserFriendRelation: (
-    value: any,
-  ) => asserts value is UserFriendRelation = (value) => {
-    if (
-      value === null ||
-      value === undefined ||
-      typeof value.id !== 'string' ||
-      typeof value.userId !== 'string' ||
-      typeof value.friendId !== 'string' ||
-      Object.prototype.toString.call(value.createdAt) !== '[object Date]'
-    ) {
-      console.log(value);
-      throw new Error('指定されたUserFriendRelationは存在しません');
-    }
   };
 });

@@ -1,5 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { Prisma, User } from '@prisma/client';
+import { assertUser, checkUser } from '../../../helper/user/user.helper';
 import { PrismaService } from '../../../../src/repository/prisma/prisma.service';
 import { UserRepository } from '../../../../src/repository/user/user.repository';
 
@@ -52,27 +53,5 @@ describe('UserRepository', () => {
     const saved = await repository.save({ name, age, comment });
     testIds.push(saved.id);
     return saved;
-  };
-
-  const assertUser = (
-    actual: User,
-    { name = 'user1', age = 32, comment = null }: Omit<Partial<User>, 'id'>,
-  ) => {
-    expect(actual.id).not.toBeNull();
-    expect(actual.name).toBe(name);
-    expect(actual.age).toBe(age);
-    comment && expect(actual.comment).toBe(comment);
-  };
-
-  const checkUser: (user: any) => asserts user is User = (user) => {
-    if (
-      user === undefined ||
-      user === null ||
-      typeof user.id !== 'string' ||
-      typeof user.name !== 'string' ||
-      typeof user.age !== 'number' ||
-      (typeof user.comment !== 'string' && typeof user.comment !== null)
-    )
-      throw Error('指定されたuserは存在しません');
   };
 });
