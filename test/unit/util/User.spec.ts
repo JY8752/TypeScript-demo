@@ -1,4 +1,4 @@
-import { AbstractUser, AdminUser, User } from '../../../../src/util/User';
+import { AbstractUser, AdminUser, User } from '../../../src/util/User';
 
 describe('UserTest', () => {
   describe('User', () => {

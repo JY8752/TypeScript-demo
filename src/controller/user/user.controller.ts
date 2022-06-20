@@ -13,7 +13,7 @@ export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Get(':id')
-  async getUser(@Param('') params: GetUserInput): Promise<UserResponse> {
+  async getUser(@Param() params: GetUserInput): Promise<UserResponse> {
     return await this.userService.get(params);
   }
 
