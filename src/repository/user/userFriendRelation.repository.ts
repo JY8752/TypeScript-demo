@@ -24,8 +24,16 @@ export class UserFriendRelationRepository {
     });
   }
 
+  async findByUserId(userId: string): Promise<UserFriendRelation[]> {
+    return this.prismaService.userFriendRelation.findMany({
+      where: {
+        userId,
+      },
+    });
+  }
+
   async exist(userId: string, friendId: string): Promise<boolean> {
-    return this.findByUserIdAndFriendId(userId, friendId) !== null;
+    return (await this.findByUserIdAndFriendId(userId, friendId)) !== null;
   }
 
   async delete(userId: string, friendId: string): Promise<Prisma.BatchPayload> {

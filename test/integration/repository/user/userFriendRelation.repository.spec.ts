@@ -53,7 +53,7 @@ describe('UserFriendRelationRepository', () => {
     const doc = await createUserFriendRelation();
 
     repository.deleteByIds([doc.id]).then(async () => {
-      expect(repository.exist(doc.userId, doc.friendId)).toBe(false);
+      expect(await repository.exist(doc.userId, doc.friendId)).toBe(false);
     });
   });
 

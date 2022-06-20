@@ -19,3 +19,9 @@ export const generixMap = <T, U>(
   }
   return newArray;
 };
+
+export const filterNotNull: <T>(array: (T | null)[]) => asserts array is T[] = (
+  array,
+) => {
+  return array.filter((v) => v);
+};
